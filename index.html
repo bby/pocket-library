@@ -1,0 +1,103 @@
+<html>
+	<head>
+		<title></title>
+		<style>
+		body, ul, li {
+			padding: 0;
+			margin: 0;
+		}
+
+		ul { 
+			transform: rotate3d(0,0,1,-90deg);
+			float: left;
+			display: inline-block;
+			list-style: none;
+			height: 100%;
+		
+			/*-webkit-linear-gradient(90deg,#24C6DC 10%,#514A9D 90%);
+			background:-webkit-linear-gradient(bottom, #24C6DC 10%, #514A9D 0%);
+			background:-o-linear-gradient(bottom, #24C6DC 10%, #514A9D 0%);
+			background:linear-gradient(to top, #24C6DC 10%, #514A9D 0%);*/
+		}
+
+		li {
+			
+    		box-shadow: inset 4px 0 5px rgba(255,255,255,0.1), inset 5px 0 5px rgba(0,0,0,0.05), inset -5px 0 5px rgba(0,0,0,0.04);
+			border: 1px solid white;
+			/*background: #a4a4a4;*/
+			-webkit-border-radius: 2px;
+-moz-border-radius: 2px;
+border-radius: 2px;
+    		padding: 0.5em;
+
+    		background: url('./spine.png') no-repeat;
+		}
+
+		a {
+			color: #fff;
+			text-decoration: none;
+			display: block;
+			transform: rotate3d(0,0,1,-180deg);
+		}
+		</style>
+	</head>
+	<body>
+
+	<main>
+		
+	</main>
+	<script type="text/javascript" src="./please.min.js"></script>
+	<script type="text/javascript">
+		var main = document.getElementsByTagName('main')[0];
+		var books = document.createElement('ul');
+		var request = new XMLHttpRequest();
+		request.open('GET', './archive.json', true);
+
+		request.onload = function() {
+		  if (request.status >= 200 && request.status < 400) {
+
+		  	var colors = Please.make_color({
+		  			scheme_type: 'analogous',
+					colors_returned: 200 //set number of colors returned
+			});
+
+		    // Success!
+		    var data = JSON.parse(request.responseText);
+		    
+		    main.appendChild(books);
+		    var i = 0;
+		    for (var key in data.list) {
+			  if (data.list.hasOwnProperty(key)) {
+			  	
+			  	li = document.createElement('li');
+			  	a = document.createElement('a');
+
+			  	a.href = data.list[key].given_url;
+			  	a.innerHTML = data.list[key].given_title;
+
+
+			  	if(data.list[key].given_title!='') {
+			  		li.appendChild(a);
+			  		books.appendChild(li);
+			  		//li.style.background = colors[i];
+			  	}
+
+			  }
+			  i++;
+			}
+		    
+		  } else {
+		    // We reached our target server, but it returned an error
+
+		  }
+		};
+
+		request.onerror = function() {
+		  // There was a connection error of some sort
+		};
+
+		request.send();
+
+	</script>
+	</body>
+</html>
